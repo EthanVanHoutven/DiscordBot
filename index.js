@@ -27,21 +27,38 @@ commandHandler['flipcoin'] = (args) => {
 }
 
 commandHandler['roll'] = (args) =>{
-    //todo ; error handling
-    const numDice = args[0].split('d')[0];
-    const dice = args[0].split('d')[1];
-    console.log(args)
-    console.log("Rolling " + numDice + " d" + dice)
+
+    const roll = args.join().replace(",","");
+
+    console.log(roll);
+    console.log(args);
+    const operator = roll.includes('-')?-1:1;
+    const rollValues = roll.split(new RegExp('[d+-]','g'))
+    
+    if(rollValues.legnth < 2)return;
+    
+    const numDice = rollValues[0];
+    const dice = rollValues[1];
+    const mod = (rollValues.length==3?rollValues[2].replace(',',''):0)*operator;
+
+    console.log(numDice);
+    console.log(dice);
+    console.log(mod);
+
     function rollDice(){
         const results = [];
         for (i=0; i < numDice; i++){
-            results.push(Math.floor(Math.random()*Math.floor(dice)) +1)
+            results.push(Math.floor(Math.random()*Math.floor(dice)) +1);
         }
-        return results.toString();
+        return results;
+    }
+    function addMods(diceRes){
+        const sum = diceRes.reduce(function(a,b){return a + b}, 0) + mod ; 
+        return "[ "+ diceRes + "] " + mod + " = " + sum;
     }
     const embed = {
         "title": `You rolled...`,
-        "description": rollDice() + ' ! ',
+        "description": addMods(rollDice()),
         "color": randomColour().hexString(),
     };
     return embed
