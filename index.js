@@ -35,7 +35,7 @@ commandHandler['roll'] = (args) =>{
     function rollDice(){
         const results = [];
         for (i=0; i < numDice; i++){
-            results.push(Math.floor(Math.random()*Math.floor(dice)))
+            results.push(Math.floor(Math.random()*Math.floor(dice)) +1)
         }
         return results.toString();
     }
